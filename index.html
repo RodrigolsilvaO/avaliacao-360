@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Avaliação 360 - Sistema anônimo de avaliação para técnicos de campo">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Avaliação 360 | Técnicos de Campo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header__inner">
+      <div class="header__brand">
+        <div class="header__logo">360</div>
+        <div>
+          <div class="header__title">Avaliação 360</div>
+          <div class="header__subtitle">Técnicos de Campo</div>
+        </div>
+      </div>
+      <nav class="header__nav">
+        <a href="index.html" class="active">Avaliar</a>
+        <a href="dashboard.html">Painel</a>
+        <span id="modeIndicator" class="mode-badge mode-badge--demo"></span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="container">
+
+    <!-- Aviso de anonimato -->
+    <div class="anonymity-notice">
+      <div class="anonymity-notice__icon">\u{1F512}</div>
+      <div class="anonymity-notice__text">
+        Esta avaliação é 100% anônima. Suas respostas não serão vinculadas à sua identidade.
+        <small>Nenhum dado pessoal é coletado. Sinta-se à vontade para dar um feedback honesto.</small>
+      </div>
+    </div>
+
+    <!-- Formulário de avaliação -->
+    <form id="evaluationForm" autocomplete="off" novalidate>
+
+      <!-- Identificação da avaliação (sem identificação pessoal) -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u{1F4CB}</div>
+          <div>
+            <div class="card__title">Dados da Avaliação</div>
+            <div class="card__description">Identifique sua equipe e o período avaliado</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="equipe">Regional / Equipe <span class="required">*</span></label>
+            <select id="equipe" required>
+              <option value="">Selecione sua equipe...</option>
+            </select>
+            <div class="error-message">Selecione sua equipe</div>
+          </div>
+
+          <div class="form-group">
+            <label for="periodo">Período <span class="required">*</span></label>
+            <select id="periodo" required>
+              <option value="">Selecione o período...</option>
+            </select>
+            <div class="error-message">Selecione o período</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questão 1: Avaliação do Gestor Imediato -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u{1F464}</div>
+          <div>
+            <div class="card__title">1. Avaliação do Gestor Imediato</div>
+            <div class="card__description">Avalie seu supervisor direto (coordenador/encarregado)</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gestorPositivos">
+            Pontos Positivos <span class="required">*</span>
+          </label>
+          <span class="hint">O que seu gestor faz de bom? Liderança, comunicação, suporte...</span>
+          <textarea id="gestorPositivos" placeholder="Descreva os pontos positivos do seu gestor..." rows="4" required></textarea>
+          <div class="error-message">Preencha os pontos positivos do gestor</div>
+        </div>
+
+        <div class="form-group">
+          <label for="gestorNegativos">
+            Pontos Negativos / A Melhorar <span class="required">*</span>
+          </label>
+          <span class="hint">O que poderia melhorar? Organização, comunicação, planejamento...</span>
+          <textarea id="gestorNegativos" placeholder="Descreva os pontos que podem melhorar..." rows="4" required></textarea>
+          <div class="error-message">Preencha os pontos negativos do gestor</div>
+        </div>
+      </div>
+
+      <!-- Questão 2: Avaliação da Empresa -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u{1F3E2}</div>
+          <div>
+            <div class="card__title">2. Avaliação da Empresa</div>
+            <div class="card__description">O que você acha da empresa como um todo?</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="empresaComentario">
+            Sua opinião sobre a empresa <span class="required">*</span>
+          </label>
+          <span class="hint">Benefícios, condições de trabalho, cultura, oportunidades...</span>
+          <textarea id="empresaComentario" placeholder="Compartilhe sua opinião sobre a empresa..." rows="4" required></textarea>
+          <div class="error-message">Preencha sua avaliação da empresa</div>
+        </div>
+
+        <div class="form-group">
+          <label>Nota para a empresa <span class="required">*</span></label>
+          <div class="star-rating" id="starsEmpresa">
+            <input type="radio" name="empresaNota" value="5" id="empresa5">
+            <label for="empresa5" title="5 - Muito Satisfeito">\u2605</label>
+            <input type="radio" name="empresaNota" value="4" id="empresa4">
+            <label for="empresa4" title="4 - Satisfeito">\u2605</label>
+            <input type="radio" name="empresaNota" value="3" id="empresa3">
+            <label for="empresa3" title="3 - Neutro">\u2605</label>
+            <input type="radio" name="empresaNota" value="2" id="empresa2">
+            <label for="empresa2" title="2 - Insatisfeito">\u2605</label>
+            <input type="radio" name="empresaNota" value="1" id="empresa1">
+            <label for="empresa1" title="1 - Muito Insatisfeito">\u2605</label>
+          </div>
+          <div class="star-value"></div>
+          <div class="error-message">Selecione uma nota para a empresa</div>
+        </div>
+      </div>
+
+      <!-- Questão 3: Avaliação do Sistema/Ferramentas -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u{1F4F1}</div>
+          <div>
+            <div class="card__title">3. Avaliação dos Sistemas e Ferramentas</div>
+            <div class="card__description">Avalie os sistemas e ferramentas que você usa no dia a dia</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sistemaComentario">
+            Sua opinião sobre os sistemas <span class="required">*</span>
+          </label>
+          <span class="hint">Apps, sistemas de OS, ferramentas de trabalho, equipamentos...</span>
+          <textarea id="sistemaComentario" placeholder="Compartilhe sua experiência com os sistemas..." rows="4" required></textarea>
+          <div class="error-message">Preencha sua avaliação dos sistemas</div>
+        </div>
+
+        <div class="form-group">
+          <label>Nota para os sistemas <span class="required">*</span></label>
+          <div class="star-rating" id="starsSistema">
+            <input type="radio" name="sistemaNota" value="5" id="sistema5">
+            <label for="sistema5" title="5 - Muito Satisfeito">\u2605</label>
+            <input type="radio" name="sistemaNota" value="4" id="sistema4">
+            <label for="sistema4" title="4 - Satisfeito">\u2605</label>
+            <input type="radio" name="sistemaNota" value="3" id="sistema3">
+            <label for="sistema3" title="3 - Neutro">\u2605</label>
+            <input type="radio" name="sistemaNota" value="2" id="sistema2">
+            <label for="sistema2" title="2 - Insatisfeito">\u2605</label>
+            <input type="radio" name="sistemaNota" value="1" id="sistema1">
+            <label for="sistema1" title="1 - Muito Insatisfeito">\u2605</label>
+          </div>
+          <div class="star-value"></div>
+          <div class="error-message">Selecione uma nota para os sistemas</div>
+        </div>
+      </div>
+
+      <!-- Satisfação Geral -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u2B50</div>
+          <div>
+            <div class="card__title">Satisfação Geral</div>
+            <div class="card__description">No geral, como você se sente trabalhando aqui?</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Sua satisfação geral <span class="required">*</span></label>
+          <div class="star-rating" id="starsGeral" style="justify-content: flex-end;">
+            <input type="radio" name="satisfacaoGeral" value="5" id="geral5">
+            <label for="geral5" title="5 - Muito Satisfeito" style="font-size: 2.5rem;">\u2605</label>
+            <input type="radio" name="satisfacaoGeral" value="4" id="geral4">
+            <label for="geral4" title="4 - Satisfeito" style="font-size: 2.5rem;">\u2605</label>
+            <input type="radio" name="satisfacaoGeral" value="3" id="geral3">
+            <label for="geral3" title="3 - Neutro" style="font-size: 2.5rem;">\u2605</label>
+            <input type="radio" name="satisfacaoGeral" value="2" id="geral2">
+            <label for="geral2" title="2 - Insatisfeito" style="font-size: 2.5rem;">\u2605</label>
+            <input type="radio" name="satisfacaoGeral" value="1" id="geral1">
+            <label for="geral1" title="1 - Muito Insatisfeito" style="font-size: 2.5rem;">\u2605</label>
+          </div>
+          <div class="star-value"></div>
+          <div class="error-message">Selecione sua satisfação geral</div>
+        </div>
+      </div>
+
+      <!-- Botão de envio -->
+      <button type="submit" id="submitBtn" class="btn btn--primary btn--block" style="padding: 16px; font-size: 1.1rem;">
+        Enviar Avaliação
+      </button>
+
+      <p class="text-center text-muted mt-2" style="font-size: 0.8rem;">
+        Ao enviar, você confirma que suas respostas são sinceras. Lembre-se: esta avaliação é anônima.
+      </p>
+
+    </form>
+
+    <!-- Tela de sucesso (oculta por padrão) -->
+    <div id="successScreen" class="success-screen">
+      <div class="success-screen__checkmark">\u2713</div>
+      <h2 class="success-screen__title">Avaliação Enviada!</h2>
+      <p class="success-screen__message">
+        Obrigado pelo seu feedback. Sua avaliação foi registrada com sucesso e é completamente anônima.
+      </p>
+      <p class="text-muted mb-3" style="font-size: 0.9rem;">
+        Seu feedback ajuda a melhorar o ambiente de trabalho para todos.
+      </p>
+      <button onclick="resetForm()" class="btn btn--secondary">
+        Enviar Nova Avaliação
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Avaliação 360 &mdash; Sistema de feedback anônimo para técnicos de campo</p>
+    <p class="mt-1">
+      <a href="setup.html">Configurações</a>
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/form.js"></script>
+
+</body>
+</html>

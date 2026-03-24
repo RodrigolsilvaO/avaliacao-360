@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Avaliação 360 - Configuração do Google Sheets">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Avaliação 360 | Configuração</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header__inner">
+      <div class="header__brand">
+        <div class="header__logo">360</div>
+        <div>
+          <div class="header__title">Avaliação 360</div>
+          <div class="header__subtitle">Configuração</div>
+        </div>
+      </div>
+      <nav class="header__nav">
+        <a href="index.html">Avaliar</a>
+        <a href="dashboard.html">Painel</a>
+        <a href="setup.html" class="active">Config</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="container">
+
+    <div class="mb-3 mt-2">
+      <h1>Configuração do Sistema</h1>
+      <p style="margin-top: 4px;">Configure a integração com o Google Sheets para armazenamento permanente dos dados</p>
+    </div>
+
+    <!-- Status atual -->
+    <div class="card">
+      <div class="card__header">
+        <div class="card__icon">\u2699\uFE0F</div>
+        <div>
+          <div class="card__title">Status Atual</div>
+          <div class="card__description">Modo de operação do sistema</div>
+        </div>
+      </div>
+      <div id="currentStatus" class="connection-status connection-status--info">
+        Verificando...
+      </div>
+    </div>
+
+    <!-- Modo Demo -->
+    <div class="card">
+      <div class="card__header">
+        <div class="card__icon">\u{1F4BE}</div>
+        <div>
+          <div class="card__title">Modo Demo (localStorage)</div>
+          <div class="card__description">Os dados ficam salvos apenas no navegador</div>
+        </div>
+      </div>
+      <p style="font-size: 0.9rem; margin-bottom: 16px;">
+        No modo demo, todas as avaliações são armazenadas localmente no navegador.
+        Isso é útil para testes, mas os dados <strong>não são compartilhados</strong> entre dispositivos
+        e podem ser perdidos ao limpar os dados do navegador.
+      </p>
+      <div class="d-flex gap-2 flex-wrap">
+        <button onclick="setDemoMode()" class="btn btn--secondary btn--small">Usar Modo Demo</button>
+        <button onclick="clearLocalData()" class="btn btn--danger btn--small">Limpar Dados Locais</button>
+      </div>
+    </div>
+
+    <!-- Guia de integração Google Sheets -->
+    <div class="card">
+      <div class="card__header">
+        <div class="card__icon">\u{1F4D7}</div>
+        <div>
+          <div class="card__title">Integração com Google Sheets</div>
+          <div class="card__description">Passo a passo para conectar ao Google Sheets</div>
+        </div>
+      </div>
+
+      <!-- Passo 1 -->
+      <div class="setup-step">
+        <div class="setup-step__number">1</div>
+        <div class="setup-step__content">
+          <div class="setup-step__title">Crie uma Planilha no Google Sheets</div>
+          <div class="setup-step__text">
+            Acesse <a href="https://sheets.google.com" target="_blank">sheets.google.com</a> e crie uma nova planilha.
+            Na primeira linha, adicione os seguintes cabeçalhos:
+          </div>
+          <div class="code-block">
+            <button class="code-block__copy" onclick="copyCode(this)">Copiar</button>
+            <code>Data | Equipe | Período | Gestor - Pontos Positivos | Gestor - Pontos Negativos | Empresa - Comentário | Empresa - Nota | Sistema - Comentário | Sistema - Nota | Satisfação Geral</code>
+          </div>
+          <p class="text-muted mt-1" style="font-size: 0.8rem;">
+            Dica: Use o separador "|" como guia. Cada item deve estar em uma coluna separada (A até J).
+          </p>
+        </div>
+      </div>
+
+      <!-- Passo 2 -->
+      <div class="setup-step">
+        <div class="setup-step__number">2</div>
+        <div class="setup-step__content">
+          <div class="setup-step__title">Abra o Editor de Scripts</div>
+          <div class="setup-step__text">
+            Na planilha, vá em <strong>Extensões &gt; Apps Script</strong>. Isso abrirá o editor de código do Google.
+            Apague todo o conteúdo existente no editor.
+          </div>
+        </div>
+      </div>
+
+      <!-- Passo 3 -->
+      <div class="setup-step">
+        <div class="setup-step__number">3</div>
+        <div class="setup-step__content">
+          <div class="setup-step__title">Cole o Código do Script</div>
+          <div class="setup-step__text">
+            Copie o código abaixo e cole no editor do Apps Script. Este código cria uma API que recebe
+            e retorna dados da planilha.
+          </div>
+          <div class="code-block">
+            <button class="code-block__copy" onclick="copyCode(this)">Copiar</button>
+            <code>// Avaliação 360 - Script para Google Sheets
+// Cole este código em: Extensões > Apps Script
+
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+
+  sheet.appendRow([
+    new Date(),
+    data.equipe,
+    data.periodo,
+    data.gestorPositivos,
+    data.gestorNegativos,
+    data.empresaComentario,
+    data.empresaNota,
+    data.sistemaComentario,
+    data.sistemaNota,
+    data.satisfacaoGeral
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({status: 'success'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var rows = data.slice(1);
+
+  var result = rows.map(function(row) {
+    var obj = {};
+    headers.forEach(function(header, i) {
+      obj[header] = row[i];
+    });
+    return obj;
+  });
+
+  return ContentService
+    .createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Passo 4 -->
+      <div class="setup-step">
+        <div class="setup-step__number">4</div>
+        <div class="setup-step__content">
+          <div class="setup-step__title">Implante como Aplicativo Web</div>
+          <div class="setup-step__text">
+            No editor do Apps Script:
+          </div>
+          <ol style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 20px; line-height: 2;">
+            <li>Clique em <strong>Implantar &gt; Nova implantação</strong></li>
+            <li>Em "Tipo", selecione <strong>App da Web</strong></li>
+            <li>Em "Executar como", selecione <strong>Eu mesmo</strong></li>
+            <li>Em "Quem pode acessar", selecione <strong>Qualquer pessoa</strong></li>
+            <li>Clique em <strong>Implantar</strong></li>
+            <li>Autorize o acesso quando solicitado</li>
+            <li>Copie a <strong>URL do aplicativo web</strong> gerada</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Passo 5 -->
+      <div class="setup-step">
+        <div class="setup-step__number">5</div>
+        <div class="setup-step__content">
+          <div class="setup-step__title">Configure a URL no Sistema</div>
+          <div class="setup-step__text">
+            Cole a URL do Apps Script no campo abaixo e teste a conexão.
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Campo para URL do script -->
+      <div class="form-group">
+        <label for="scriptUrl">URL do Google Apps Script</label>
+        <span class="hint">Cole aqui a URL gerada na etapa de implantação</span>
+        <input type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/...../exec">
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <button onclick="testConnection()" id="testBtn" class="btn btn--secondary btn--small">
+          \u{1F50C} Testar Conexão
+        </button>
+        <button onclick="saveConfig()" id="saveBtn" class="btn btn--primary btn--small">
+          \u{1F4BE} Salvar e Ativar Google Sheets
+        </button>
+      </div>
+
+      <div id="connectionResult" class="mt-2"></div>
+
+    </div>
+
+    <!-- Observações importantes -->
+    <div class="card">
+      <div class="card__header">
+        <div class="card__icon">\u26A0\uFE0F</div>
+        <div>
+          <div class="card__title">Observações Importantes</div>
+        </div>
+      </div>
+      <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 20px; line-height: 2;">
+        <li>A planilha do Google Sheets serve como banco de dados gratuito e acessível</li>
+        <li>Mesmo no modo Google Sheets, os dados também são salvos localmente como backup</li>
+        <li>O sistema <strong>não coleta nenhum dado pessoal</strong> dos técnicos</li>
+        <li>Para alterar a senha do dashboard, edite o código em <code>config.js</code></li>
+        <li>Recomendamos compartilhar a planilha apenas com coordenadores e gestores autorizados</li>
+        <li>Se a integração falhar, os dados continuam seguros no armazenamento local</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Avaliação 360 &mdash; Configuração do Sistema</p>
+    <p class="mt-1">
+      <a href="index.html">Voltar ao formulário</a> &middot;
+      <a href="dashboard.html">Acessar painel</a>
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script>
+    // Inicialização da página de setup
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCurrentStatus();
+      loadSavedUrl();
+    });
+
+    // Exibe o status atual da configuração
+    function updateCurrentStatus() {
+      const statusEl = document.getElementById('currentStatus');
+      const mode = Config.getMode();
+      const url = Config.getScriptUrl();
+
+      if (mode === 'sheets' && url) {
+        statusEl.className = 'connection-status connection-status--success';
+        statusEl.innerHTML = '\u2705 Modo Google Sheets ativo. Os dados são enviados para a planilha.';
+      } else {
+        statusEl.className = 'connection-status connection-status--info';
+        statusEl.innerHTML = '\u{1F4BE} Modo Demo ativo. Os dados são armazenados apenas localmente no navegador.';
+      }
+    }
+
+    // Carrega URL salva, se houver
+    function loadSavedUrl() {
+      const urlInput = document.getElementById('scriptUrl');
+      const savedUrl = Config.getScriptUrl();
+      if (savedUrl && urlInput) {
+        urlInput.value = savedUrl;
+      }
+    }
+
+    // Ativa modo demo
+    function setDemoMode() {
+      Config.setMode('demo');
+      Config.setScriptUrl('');
+      document.getElementById('scriptUrl').value = '';
+      updateCurrentStatus();
+      showResult('info', 'Modo Demo ativado. Os dados serão armazenados localmente.');
+    }
+
+    // Limpa dados locais
+    function clearLocalData() {
+      if (confirm('Tem certeza que deseja apagar TODOS os dados locais de avaliações? Esta ação não pode ser desfeita.')) {
+        localStorage.removeItem(Config.STORAGE_KEYS.EVALUATIONS);
+        showResult('info', 'Dados locais apagados com sucesso.');
+      }
+    }
+
+    // Testa conexão com o Google Sheets
+    async function testConnection() {
+      const urlInput = document.getElementById('scriptUrl');
+      const url = urlInput.value.trim();
+      const testBtn = document.getElementById('testBtn');
+
+      if (!url) {
+        showResult('error', 'Por favor, insira a URL do Google Apps Script.');
+        return;
+      }
+
+      testBtn.disabled = true;
+      testBtn.innerHTML = '<span class="spinner"></span> Testando...';
+      showResult('info', 'Testando conexão...');
+
+      // Salva temporariamente a URL para o teste
+      const previousUrl = Config.getScriptUrl();
+      Config.setScriptUrl(url);
+
+      try {
+        const result = await SheetsAPI.testConnection();
+        if (result.success) {
+          showResult('success', result.message);
+        } else {
+          showResult('error', result.message);
+          Config.setScriptUrl(previousUrl); // Restaura URL anterior
+        }
+      } catch (error) {
+        showResult('error', 'Erro ao testar: ' + error.message);
+        Config.setScriptUrl(previousUrl);
+      }
+
+      testBtn.disabled = false;
+      testBtn.innerHTML = '\u{1F50C} Testar Conexão';
+    }
+
+    // Salva configuração e ativa modo Sheets
+    function saveConfig() {
+      const urlInput = document.getElementById('scriptUrl');
+      const url = urlInput.value.trim();
+
+      if (!url) {
+        showResult('error', 'Por favor, insira a URL do Google Apps Script antes de salvar.');
+        return;
+      }
+
+      if (!url.startsWith('https://script.google.com/')) {
+        showResult('error', 'A URL deve começar com https://script.google.com/');
+        return;
+      }
+
+      Config.setScriptUrl(url);
+      Config.setMode('sheets');
+      updateCurrentStatus();
+      showResult('success', 'Configuração salva! O sistema agora envia dados para o Google Sheets.');
+    }
+
+    // Exibe resultado de operação
+    function showResult(type, message) {
+      const container = document.getElementById('connectionResult');
+      const classMap = {
+        success: 'connection-status--success',
+        error: 'connection-status--error',
+        info: 'connection-status--info'
+      };
+      const iconMap = {
+        success: '\u2705',
+        error: '\u274C',
+        info: '\u2139\uFE0F'
+      };
+
+      container.innerHTML = `
+        <div class="connection-status ${classMap[type]}">
+          ${iconMap[type]} ${message}
+        </div>
+      `;
+    }
+
+    // Copia código para a área de transferência
+    function copyCode(button) {
+      const codeBlock = button.parentElement;
+      const code = codeBlock.querySelector('code').textContent;
+
+      navigator.clipboard.writeText(code).then(() => {
+        button.textContent = 'Copiado!';
+        button.style.color = 'var(--success)';
+        button.style.borderColor = 'var(--success)';
+        setTimeout(() => {
+          button.textContent = 'Copiar';
+          button.style.color = '';
+          button.style.borderColor = '';
+        }, 2000);
+      }).catch(() => {
+        // Fallback para navegadores mais antigos
+        const textarea = document.createElement('textarea');
+        textarea.value = code;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        button.textContent = 'Copiado!';
+        setTimeout(() => { button.textContent = 'Copiar'; }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>

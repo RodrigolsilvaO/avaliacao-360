@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Avaliação 360 - Painel Administrativo">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Avaliação 360 | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Tela de senha -->
+  <div id="passwordOverlay" class="password-overlay">
+    <div class="password-modal">
+      <div class="password-modal__icon">\u{1F512}</div>
+      <h2 class="password-modal__title">Acesso Restrito</h2>
+      <p class="password-modal__text">Este painel é exclusivo para coordenadores e gestores.</p>
+      <form id="passwordForm">
+        <div class="form-group">
+          <input type="password" id="passwordInput" placeholder="Digite o código de acesso..." autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Acessar Painel</button>
+        <div id="passwordError" class="password-modal__error">
+          Código incorreto. Tente novamente.
+        </div>
+      </form>
+      <p class="text-muted mt-2" style="font-size: 0.8rem;">
+        <a href="index.html">&larr; Voltar para o formulário</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Dashboard (oculto até autenticação) -->
+  <div id="dashboardContent" style="display: none;">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__brand">
+          <div class="header__logo">360</div>
+          <div>
+            <div class="header__title">Avaliação 360</div>
+            <div class="header__subtitle">Painel Administrativo</div>
+          </div>
+        </div>
+        <nav class="header__nav">
+          <a href="index.html">Avaliar</a>
+          <a href="dashboard.html" class="active">Painel</a>
+          <a href="setup.html">Config</a>
+          <span id="modeIndicator" class="mode-badge mode-badge--demo"></span>
+          <button onclick="logout()" class="btn btn--small btn--secondary" title="Sair">Sair</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="container container--wide">
+
+      <!-- Título da página -->
+      <div class="mb-3 mt-2">
+        <h1>Dashboard de Avaliações</h1>
+        <p style="margin-top: 4px;">Visão geral dos feedbacks dos técnicos de campo</p>
+      </div>
+
+      <!-- Cards de estatísticas -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card__value" id="statTotal">0</div>
+          <div class="stat-card__label">Total de Avaliações</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value" id="statMedia">-</div>
+          <div class="stat-card__label">Média Geral</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value" id="statMes">0</div>
+          <div class="stat-card__label">Avaliações Este Mês</div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u{1F50D}</div>
+          <div>
+            <div class="card__title">Filtros</div>
+            <div class="card__description">Filtre por equipe e período</div>
+          </div>
+        </div>
+        <div class="filters">
+          <select id="filterEquipe">
+            <option value="todas">Todas as Equipes</option>
+          </select>
+          <select id="filterPeriodo">
+            <option value="todos">Todos os Períodos</option>
+          </select>
+          <button onclick="exportCSV()" class="btn btn--success btn--small" title="Exportar dados para CSV">
+            \u{1F4E5} Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon">\u{1F4CA}</div>
+            <div>
+              <div class="card__title">Média por Equipe</div>
+              <div class="card__description">Satisfação geral de cada equipe</div>
+            </div>
+          </div>
+          <div id="chartBars" class="chart-container">
+            <div class="empty-state">
+              <div class="empty-state__icon">\u{1F4CA}</div>
+              <div class="empty-state__text">Sem dados para exibir</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon">\u2B50</div>
+            <div>
+              <div class="card__title">Distribuição de Notas</div>
+              <div class="card__description">Satisfação geral (todas as avaliações)</div>
+            </div>
+          </div>
+          <div id="starDistribution" class="star-distribution">
+            <div class="empty-state">
+              <div class="empty-state__icon">\u2B50</div>
+              <div class="empty-state__text">Sem dados para exibir</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráficos responsivos em mobile -->
+      <style>
+        @media (max-width: 768px) {
+          div[style*="grid-template-columns: 1fr 1fr"] {
+            display: flex !important;
+            flex-direction: column !important;
+          }
+        }
+      </style>
+
+      <!-- Lista de avaliações recentes -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">\u{1F4DD}</div>
+          <div>
+            <div class="card__title">Avaliações Recentes</div>
+            <div class="card__description">Feedbacks individuais (anônimos)</div>
+          </div>
+        </div>
+        <div id="evaluationList" class="evaluation-list">
+          <div class="empty-state">
+            <div class="empty-state__icon">\u{1F4DD}</div>
+            <div class="empty-state__text">Nenhuma avaliação encontrada</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Avaliação 360 &mdash; Painel restrito a coordenadores e gestores</p>
+      <p class="mt-1">Os dados exibidos são anônimos. Respeite a privacidade dos avaliadores.</p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>
