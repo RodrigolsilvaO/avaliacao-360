@@ -1,21 +1,21 @@
 /* =============================================
-   Avaliação 360 - Configuração e Armazenamento
-   Módulo compartilhado entre formulário e dashboard
+   Avaliacao 360 - Configuracao e Armazenamento
+   Modulo compartilhado entre formulario e dashboard
    ============================================= */
 
 const Config = {
   // Chaves de armazenamento local
   STORAGE_KEYS: {
     EVALUATIONS: 'av360_evaluations',
-    SCRIPT_URL: 'av360_script_url',
-    MODE: 'av360_mode', // 'demo' ou 'sheets'
+    FORMSPREE_ENDPOINT: 'av360_formspree_endpoint',
+    MODE: 'av360_mode', // 'demo' ou 'formspree'
     DASHBOARD_PASSWORD: 'av360_password'
   },
 
-  // Senha padrão do dashboard
+  // Senha padrao do dashboard
   DEFAULT_PASSWORD: 'vivo360',
 
-  // Equipes disponíveis
+  // Equipes disponiveis
   EQUIPES: [
     { value: 'equipe_a', label: 'Equipe A' },
     { value: 'equipe_b', label: 'Equipe B' },
@@ -25,16 +25,16 @@ const Config = {
     { value: 'equipe_f', label: 'Equipe F' }
   ],
 
-  // Períodos (gera meses automaticamente)
+  // Periodos (gera meses automaticamente)
   getPeriodos() {
     const meses = [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho',
       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
     ];
     const periodos = [];
     const anoAtual = new Date().getFullYear();
 
-    // Gerar meses do ano atual e do próximo
+    // Gerar meses do ano atual e do proximo
     for (let ano = anoAtual; ano <= anoAtual + 1; ano++) {
       for (let mes = 0; mes < 12; mes++) {
         periodos.push({
@@ -46,7 +46,7 @@ const Config = {
     return periodos;
   },
 
-  // Verifica o modo atual (demo ou sheets)
+  // Verifica o modo atual (demo ou formspree)
   getMode() {
     return localStorage.getItem(this.STORAGE_KEYS.MODE) || 'demo';
   },
@@ -56,30 +56,20 @@ const Config = {
     localStorage.setItem(this.STORAGE_KEYS.MODE, mode);
   },
 
-  // Obtém a URL do Google Apps Script
-  getScriptUrl() {
-    return localStorage.getItem(this.STORAGE_KEYS.SCRIPT_URL) || '';
-  },
-
-  // Salva a URL do Google Apps Script
-  setScriptUrl(url) {
-    localStorage.setItem(this.STORAGE_KEYS.SCRIPT_URL, url);
-  },
-
-  // Obtém a senha do dashboard
+  // Obtem a senha do dashboard
   getPassword() {
     return localStorage.getItem(this.STORAGE_KEYS.DASHBOARD_PASSWORD) || this.DEFAULT_PASSWORD;
   }
 };
 
 /* =============================================
-   Módulo de armazenamento local (modo demo)
+   Modulo de armazenamento local (modo demo)
    ============================================= */
 const Storage = {
-  // Salva uma nova avaliação
+  // Salva uma nova avaliacao
   saveEvaluation(data) {
     const evaluations = this.getAllEvaluations();
-    // Adiciona timestamp e ID único
+    // Adiciona timestamp e ID unico
     data.id = this._generateId();
     data.timestamp = new Date().toISOString();
     evaluations.push(data);
@@ -87,18 +77,60 @@ const Storage = {
     return data;
   },
 
-  // Obtém todas as avaliações
+  // Obtem todas as avaliacoes
   getAllEvaluations() {
     try {
       const stored = localStorage.getItem(Config.STORAGE_KEYS.EVALUATIONS);
       return stored ? JSON.parse(stored) : [];
     } catch (e) {
-      console.error('Erro ao ler avaliações do localStorage:', e);
+      console.error('Erro ao ler avaliacoes do localStorage:', e);
       return [];
     }
   },
 
-  // Filtra avaliações por equipe e/ou período
+  // Importa avaliacoes de JSON (para dados exportados do Formspree)
+  importEvaluations(jsonData) {
+    try {
+      let imported;
+      if (typeof jsonData === 'string') {
+        imported = JSON.parse(jsonData);
+      } else {
+        imported = jsonData;
+      }
+
+      if (!Array.isArray(imported)) {
+        imported = [imported];
+      }
+
+      const existing = this.getAllEvaluations();
+      const existingIds = new Set(existing.map(e => e.id));
+
+      let addedCount = 0;
+      imported.forEach(item => {
+        // Atribui ID se nao tiver
+        if (!item.id) {
+          item.id = this._generateId();
+        }
+        // Evita duplicatas
+        if (!existingIds.has(item.id)) {
+          if (!item.timestamp) {
+            item.timestamp = new Date().toISOString();
+          }
+          existing.push(item);
+          existingIds.add(item.id);
+          addedCount++;
+        }
+      });
+
+      localStorage.setItem(Config.STORAGE_KEYS.EVALUATIONS, JSON.stringify(existing));
+      return { success: true, added: addedCount, total: existing.length };
+    } catch (e) {
+      console.error('Erro ao importar dados:', e);
+      return { success: false, error: e.message };
+    }
+  },
+
+  // Filtra avaliacoes por equipe e/ou periodo
   getFilteredEvaluations(filters = {}) {
     let evaluations = this.getAllEvaluations();
 
@@ -116,7 +148,7 @@ const Storage = {
     return evaluations;
   },
 
-  // Calcula estatísticas
+  // Calcula estatisticas
   getStatistics(evaluations) {
     if (!evaluations || evaluations.length === 0) {
       return {
@@ -132,19 +164,19 @@ const Storage = {
 
     const total = evaluations.length;
 
-    // Média geral de satisfação
+    // Media geral de satisfacao
     const somaGeral = evaluations.reduce((acc, e) => acc + (parseInt(e.satisfacaoGeral) || 0), 0);
     const mediaGeral = (somaGeral / total).toFixed(1);
 
-    // Média empresa
+    // Media empresa
     const somaEmpresa = evaluations.reduce((acc, e) => acc + (parseInt(e.empresaNota) || 0), 0);
     const mediaEmpresa = (somaEmpresa / total).toFixed(1);
 
-    // Média sistema
+    // Media sistema
     const somaSistema = evaluations.reduce((acc, e) => acc + (parseInt(e.sistemaNota) || 0), 0);
     const mediaSistema = (somaSistema / total).toFixed(1);
 
-    // Médias por equipe
+    // Medias por equipe
     const porEquipe = {};
     Config.EQUIPES.forEach(eq => {
       const avaliacoesDaEquipe = evaluations.filter(e => e.equipe === eq.value);
@@ -158,7 +190,7 @@ const Storage = {
       }
     });
 
-    // Distribuição de estrelas (satisfação geral)
+    // Distribuicao de estrelas (satisfacao geral)
     const distribuicaoEstrelas = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     evaluations.forEach(e => {
       const nota = parseInt(e.satisfacaoGeral);
@@ -167,7 +199,7 @@ const Storage = {
       }
     });
 
-    // Avaliações deste mês
+    // Avaliacoes deste mes
     const agora = new Date();
     const mesAtual = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}`;
     const esteMes = evaluations.filter(e => {
@@ -187,21 +219,21 @@ const Storage = {
     };
   },
 
-  // Exporta avaliações para CSV
+  // Exporta avaliacoes para CSV
   exportToCSV(evaluations) {
     if (!evaluations || evaluations.length === 0) return null;
 
     const headers = [
       'Data',
       'Equipe',
-      'Período',
+      'Periodo',
       'Gestor - Pontos Positivos',
       'Gestor - Pontos Negativos',
-      'Empresa - Comentário',
+      'Empresa - Comentario',
       'Empresa - Nota',
-      'Sistema - Comentário',
+      'Sistema - Comentario',
       'Sistema - Nota',
-      'Satisfação Geral'
+      'Satisfacao Geral'
     ];
 
     const rows = evaluations.map(e => [
@@ -217,18 +249,18 @@ const Storage = {
       e.satisfacaoGeral
     ]);
 
-    // BOM para codificação UTF-8 no Excel
+    // BOM para codificacao UTF-8 no Excel
     const bom = '\uFEFF';
     const csv = bom + [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
     return csv;
   },
 
-  // Gera ID único simples
+  // Gera ID unico simples
   _generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   },
 
-  // Formata data para exibição
+  // Formata data para exibicao
   _formatDate(isoString) {
     if (!isoString) return '-';
     const d = new Date(isoString);
@@ -241,7 +273,7 @@ const Storage = {
     });
   },
 
-  // Obtém o label da equipe pelo valor
+  // Obtem o label da equipe pelo valor
   _getEquipeLabel(value) {
     const equipe = Config.EQUIPES.find(e => e.value === value);
     return equipe ? equipe.label : value;
@@ -249,64 +281,76 @@ const Storage = {
 };
 
 /* =============================================
-   Módulo de integração com Google Sheets
+   Modulo de integracao com Formspree
    ============================================= */
-const SheetsAPI = {
-  // Envia avaliação para o Google Sheets
-  async sendEvaluation(data) {
-    const url = Config.getScriptUrl();
-    if (!url) {
-      throw new Error('URL do Google Apps Script não configurada');
+const FormspreeAPI = {
+  getEndpoint() {
+    return localStorage.getItem(Config.STORAGE_KEYS.FORMSPREE_ENDPOINT) || '';
+  },
+
+  setEndpoint(endpoint) {
+    localStorage.setItem(Config.STORAGE_KEYS.FORMSPREE_ENDPOINT, endpoint);
+  },
+
+  isConfigured() {
+    return !!this.getEndpoint();
+  },
+
+  async submit(data) {
+    const endpoint = this.getEndpoint();
+    if (!endpoint) throw new Error('Formspree nao configurado');
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Erro ao enviar para Formspree');
+    }
+    return response.json();
+  },
+
+  async testConnection() {
+    const endpoint = this.getEndpoint();
+    if (!endpoint) {
+      return { success: false, message: 'Endpoint nao configurado' };
     }
 
     try {
-      const response = await fetch(url, {
+      // Envia um dado de teste
+      const response = await fetch(endpoint, {
         method: 'POST',
-        mode: 'no-cors', // Google Apps Script requer no-cors
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          _subject: 'Teste de Conexao - Avaliacao 360',
+          teste: true,
+          mensagem: 'Este e um teste de conexao do sistema Avaliacao 360.'
+        })
       });
 
-      // Com no-cors, não conseguimos ler a resposta, mas a requisição foi enviada
-      return { status: 'success' };
+      if (response.ok) {
+        return { success: true, message: 'Conexao bem-sucedida! O Formspree esta configurado corretamente.' };
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        return { success: false, message: `Erro: ${errorData.error || response.statusText}` };
+      }
     } catch (error) {
-      console.error('Erro ao enviar para Google Sheets:', error);
-      throw error;
-    }
-  },
-
-  // Busca avaliações do Google Sheets
-  async fetchEvaluations() {
-    const url = Config.getScriptUrl();
-    if (!url) {
-      throw new Error('URL do Google Apps Script não configurada');
-    }
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Erro na resposta');
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao buscar dados do Google Sheets:', error);
-      throw error;
-    }
-  },
-
-  // Testa a conexão com o Google Sheets
-  async testConnection() {
-    try {
-      const data = await this.fetchEvaluations();
-      return { success: true, message: `Conectado! ${Array.isArray(data) ? data.length : 0} registros encontrados.` };
-    } catch (error) {
-      return { success: false, message: `Erro: ${error.message}` };
+      return { success: false, message: `Erro de conexao: ${error.message}` };
     }
   }
 };
 
 /* =============================================
-   Utilitários
+   Utilitarios
    ============================================= */
 const Utils = {
   // Renderiza estrelas como texto
@@ -319,7 +363,7 @@ const Utils = {
     return stars;
   },
 
-  // Descrição textual da nota
+  // Descricao textual da nota
   getRatingText(rating) {
     const textos = {
       1: 'Muito Insatisfeito',
@@ -331,7 +375,7 @@ const Utils = {
     return textos[rating] || '';
   },
 
-  // Formata data ISO para exibição PT-BR
+  // Formata data ISO para exibicao PT-BR
   formatDateBR(isoString) {
     if (!isoString) return '-';
     const d = new Date(isoString);
@@ -357,13 +401,13 @@ const Utils = {
     URL.revokeObjectURL(url);
   },
 
-  // Obtém label da equipe
+  // Obtem label da equipe
   getEquipeLabel(value) {
     const equipe = Config.EQUIPES.find(e => e.value === value);
     return equipe ? equipe.label : value || '-';
   },
 
-  // Obtém label do período
+  // Obtem label do periodo
   getPeriodoLabel(value) {
     const periodos = Config.getPeriodos();
     const periodo = periodos.find(p => p.value === value);

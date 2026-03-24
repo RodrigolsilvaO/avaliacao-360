@@ -1,6 +1,6 @@
 /* =============================================
-   Avaliação 360 - Estilos Globais
-   Sistema de avaliação para técnicos de campo
+   Avaliacao 360 - Tema Vivo Telefonica
+   Sistema de avaliacao para tecnicos de campo
    ============================================= */
 
 /* Reset e base */
@@ -11,27 +11,28 @@
 }
 
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #111111;
-  --bg-card: #1a1a1a;
-  --bg-card-hover: #222222;
-  --bg-input: #151515;
-  --border-color: #2a2a2a;
-  --border-focus: #8B5CF6;
-  --text-primary: #f0f0f0;
-  --text-secondary: #a0a0a0;
-  --text-muted: #666666;
-  --accent-purple: #8B5CF6;
-  --accent-purple-hover: #7C4FE0;
-  --accent-purple-glow: rgba(139, 92, 246, 0.3);
-  --accent-cyan: #00d4ff;
-  --accent-cyan-glow: rgba(0, 212, 255, 0.2);
+  --bg-primary: #13001a;
+  --bg-secondary: #1a0a2e;
+  --bg-card: rgba(102, 0, 153, 0.15);
+  --bg-card-hover: rgba(102, 0, 153, 0.25);
+  --bg-input: rgba(102, 0, 153, 0.12);
+  --border-color: rgba(123, 45, 142, 0.3);
+  --border-focus: #7B2D8E;
+  --text-primary: #ffffff;
+  --text-secondary: #d4b3e6;
+  --text-muted: #9a7bb5;
+  --accent-purple: #7B2D8E;
+  --accent-purple-hover: #660099;
+  --accent-purple-glow: rgba(123, 45, 142, 0.4);
+  --accent-purple-light: #9b59b6;
+  --accent-cyan: #d4b3e6;
+  --accent-cyan-glow: rgba(155, 89, 182, 0.2);
   --success: #00ff88;
   --success-glow: rgba(0, 255, 136, 0.2);
-  --warning: #ffbb00;
+  --warning: #FFD700;
   --danger: #ff4444;
-  --star-active: #ffbb00;
-  --star-inactive: #333333;
+  --star-active: #FFD700;
+  --star-inactive: rgba(123, 45, 142, 0.35);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -56,6 +57,9 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(102, 0, 153, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(123, 45, 142, 0.1) 0%, transparent 50%);
 }
 
 /* Tipografia */
@@ -74,13 +78,13 @@ p {
 }
 
 a {
-  color: var(--accent-purple);
+  color: var(--accent-purple-light);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--accent-cyan);
+  color: #ffffff;
 }
 
 /* Container principal */
@@ -96,17 +100,56 @@ a:hover {
 }
 
 /* =============================================
+   Vivo Branding
+   ============================================= */
+.vivo-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vivo-logo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -1px;
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+.vivo-separator {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 300;
+}
+
+.vivo-product {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.vivo-product-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+}
+
+/* =============================================
    Header
    ============================================= */
 .header {
-  background: var(--bg-secondary);
+  background: rgba(26, 10, 46, 0.95);
   border-bottom: 1px solid var(--border-color);
   padding: 16px 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .header__inner {
@@ -127,7 +170,7 @@ a:hover {
 .header__logo {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+  background: linear-gradient(135deg, #660099, #7B2D8E);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -136,6 +179,23 @@ a:hover {
   font-weight: 900;
   color: white;
   flex-shrink: 0;
+}
+
+.vivo-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -1px;
+  text-transform: lowercase;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.vivo-separator {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 0 4px;
 }
 
 .header__title {
@@ -153,6 +213,7 @@ a:hover {
 .header__nav {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .header__nav a {
@@ -166,8 +227,8 @@ a:hover {
 
 .header__nav a:hover,
 .header__nav a.active {
-  background: var(--bg-card);
-  color: var(--accent-purple);
+  background: rgba(123, 45, 142, 0.25);
+  color: #ffffff;
 }
 
 /* =============================================
@@ -181,10 +242,12 @@ a:hover {
   margin-bottom: 20px;
   box-shadow: var(--shadow-card);
   transition: border-color var(--transition-normal);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .card:hover {
-  border-color: rgba(139, 92, 246, 0.2);
+  border-color: rgba(123, 45, 142, 0.5);
 }
 
 .card__header {
@@ -197,7 +260,7 @@ a:hover {
 .card__icon {
   width: 42px;
   height: 42px;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+  background: linear-gradient(135deg, #660099, #9b59b6);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -217,7 +280,7 @@ a:hover {
 }
 
 /* =============================================
-   Formulário
+   Formulario
    ============================================= */
 .form-group {
   margin-bottom: 20px;
@@ -263,7 +326,7 @@ textarea {
 }
 
 select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23d4b3e6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 40px;
@@ -275,7 +338,7 @@ input[type="text"]:focus,
 input[type="url"]:focus,
 input[type="password"]:focus,
 textarea:focus {
-  border-color: var(--accent-purple);
+  border-color: var(--accent-purple-light);
   box-shadow: 0 0 0 3px var(--accent-purple-glow);
 }
 
@@ -296,7 +359,7 @@ textarea {
   }
 }
 
-/* Validação visual */
+/* Validacao visual */
 .form-group.error select,
 .form-group.error textarea,
 .form-group.error input {
@@ -344,7 +407,7 @@ textarea {
 .star-rating label:hover ~ label,
 .star-rating input:checked ~ label {
   color: var(--star-active);
-  text-shadow: 0 0 12px rgba(255, 187, 0, 0.4);
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
 }
 
 .star-rating.error label {
@@ -359,7 +422,7 @@ textarea {
 }
 
 /* =============================================
-   Botões
+   Botoes
    ============================================= */
 .btn {
   display: inline-flex;
@@ -385,7 +448,7 @@ textarea {
 }
 
 .btn--primary {
-  background: linear-gradient(135deg, var(--accent-purple), #6D28D9);
+  background: linear-gradient(135deg, #660099, #7B2D8E);
   color: white;
   box-shadow: 0 4px 15px var(--accent-purple-glow);
 }
@@ -393,6 +456,7 @@ textarea {
 .btn--primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 25px var(--accent-purple-glow);
+  background: linear-gradient(135deg, #7B2D8E, #9b59b6);
 }
 
 .btn--primary:active:not(:disabled) {
@@ -400,14 +464,15 @@ textarea {
 }
 
 .btn--secondary {
-  background: var(--bg-card);
+  background: rgba(102, 0, 153, 0.2);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
 }
 
 .btn--secondary:hover:not(:disabled) {
-  border-color: var(--accent-purple);
-  color: var(--accent-purple);
+  border-color: var(--accent-purple-light);
+  color: #ffffff;
+  background: rgba(102, 0, 153, 0.3);
 }
 
 .btn--success {
@@ -445,26 +510,26 @@ textarea {
    Alerta de anonimato
    ============================================= */
 .anonymity-notice {
-  background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(0, 212, 255, 0.05));
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(102, 0, 153, 0.15));
+  border: 1px solid rgba(0, 255, 136, 0.25);
   border-radius: var(--radius-lg);
-  padding: 16px 20px;
+  padding: 20px 24px;
   margin-bottom: 24px;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
 }
 
 .anonymity-notice__icon {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   flex-shrink: 0;
   line-height: 1;
 }
 
 .anonymity-notice__text {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--success);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.5;
 }
 
@@ -520,7 +585,7 @@ textarea {
 }
 
 /* =============================================
-   Dashboard - Cards de estatísticas
+   Dashboard - Cards de estatisticas
    ============================================= */
 .stats-grid {
   display: grid;
@@ -536,10 +601,11 @@ textarea {
   padding: 20px;
   text-align: center;
   transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
 }
 
 .stat-card:hover {
-  border-color: var(--accent-purple);
+  border-color: var(--accent-purple-light);
   transform: translateY(-2px);
   box-shadow: var(--shadow-glow);
 }
@@ -547,7 +613,7 @@ textarea {
 .stat-card__value {
   font-size: 2.2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+  background: linear-gradient(135deg, #9b59b6, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -576,7 +642,7 @@ textarea {
 }
 
 /* =============================================
-   Dashboard - Gráfico de barras CSS
+   Dashboard - Grafico de barras CSS
    ============================================= */
 .chart-container {
   margin-bottom: 24px;
@@ -608,7 +674,7 @@ textarea {
 
 .chart-bar__fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+  background: linear-gradient(90deg, #660099, #9b59b6);
   border-radius: var(--radius-sm);
   transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   display: flex;
@@ -624,7 +690,7 @@ textarea {
   white-space: nowrap;
 }
 
-/* Distribuição de estrelas */
+/* Distribuicao de estrelas */
 .star-distribution {
   display: flex;
   flex-direction: column;
@@ -667,7 +733,7 @@ textarea {
 }
 
 /* =============================================
-   Dashboard - Lista de avaliações
+   Dashboard - Lista de avaliacoes
    ============================================= */
 .evaluation-list {
   display: flex;
@@ -676,7 +742,7 @@ textarea {
 }
 
 .evaluation-item {
-  background: var(--bg-card);
+  background: rgba(102, 0, 153, 0.1);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 16px 20px;
@@ -684,7 +750,7 @@ textarea {
 }
 
 .evaluation-item:hover {
-  border-color: rgba(139, 92, 246, 0.3);
+  border-color: rgba(155, 89, 182, 0.4);
 }
 
 .evaluation-item__header {
@@ -708,8 +774,8 @@ textarea {
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: rgba(139, 92, 246, 0.15);
-  color: var(--accent-purple);
+  background: rgba(123, 45, 142, 0.25);
+  color: var(--accent-purple-light);
 }
 
 .evaluation-item__date {
@@ -729,7 +795,7 @@ textarea {
 .evaluation-item__section-title {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--accent-purple);
+  color: var(--accent-purple-light);
   margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -740,9 +806,9 @@ textarea {
   color: var(--text-secondary);
   line-height: 1.5;
   padding: 8px 12px;
-  background: var(--bg-input);
+  background: rgba(102, 0, 153, 0.1);
   border-radius: var(--radius-sm);
-  border-left: 3px solid var(--border-color);
+  border-left: 3px solid rgba(123, 45, 142, 0.4);
 }
 
 /* =============================================
@@ -754,7 +820,7 @@ textarea {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(19, 0, 26, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -763,7 +829,7 @@ textarea {
 }
 
 .password-modal {
-  background: var(--bg-card);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   padding: 40px;
@@ -813,7 +879,7 @@ textarea {
 .setup-step__number {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+  background: linear-gradient(135deg, #660099, #9b59b6);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -840,9 +906,9 @@ textarea {
   line-height: 1.6;
 }
 
-/* Bloco de código */
+/* Bloco de codigo */
 .code-block {
-  background: var(--bg-primary);
+  background: rgba(19, 0, 26, 0.8);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -854,7 +920,7 @@ textarea {
 .code-block code {
   font-family: 'Fira Code', 'Consolas', monospace;
   font-size: 0.82rem;
-  color: var(--accent-cyan);
+  color: var(--accent-purple-light);
   line-height: 1.6;
   white-space: pre;
 }
@@ -864,7 +930,7 @@ textarea {
   top: 8px;
   right: 8px;
   padding: 4px 10px;
-  background: var(--bg-card);
+  background: rgba(102, 0, 153, 0.2);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-muted);
@@ -874,11 +940,11 @@ textarea {
 }
 
 .code-block__copy:hover {
-  color: var(--accent-purple);
-  border-color: var(--accent-purple);
+  color: var(--accent-purple-light);
+  border-color: var(--accent-purple-light);
 }
 
-/* Status de conexão */
+/* Status de conexao */
 .connection-status {
   display: flex;
   align-items: center;
@@ -903,9 +969,9 @@ textarea {
 }
 
 .connection-status--info {
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.3);
-  color: var(--accent-cyan);
+  background: rgba(155, 89, 182, 0.15);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  color: var(--accent-purple-light);
 }
 
 /* =============================================
@@ -921,17 +987,58 @@ textarea {
 }
 
 .footer a {
-  color: var(--accent-purple);
+  color: var(--accent-purple-light);
+}
+
+.footer-internal {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  opacity: 0.7;
 }
 
 /* =============================================
-   Utilitários
+   Info banner (Formspree notice on dashboard)
+   ============================================= */
+.info-banner {
+  background: rgba(155, 89, 182, 0.12);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.info-banner__icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Import JSON section */
+.import-section {
+  margin-top: 16px;
+}
+
+.import-section textarea {
+  min-height: 80px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.82rem;
+}
+
+/* =============================================
+   Utilitarios
    ============================================= */
 .text-center { text-align: center; }
 .text-muted { color: var(--text-muted); }
 .text-success { color: var(--success); }
 .text-danger { color: var(--danger); }
-.text-purple { color: var(--accent-purple); }
+.text-purple { color: var(--accent-purple-light); }
 .text-cyan { color: var(--accent-cyan); }
 
 .mt-1 { margin-top: 8px; }
@@ -967,8 +1074,13 @@ textarea {
 }
 
 .mode-badge--demo {
-  background: rgba(255, 187, 0, 0.15);
+  background: rgba(255, 215, 0, 0.15);
   color: var(--warning);
+}
+
+.mode-badge--formspree {
+  background: rgba(0, 255, 136, 0.15);
+  color: var(--success);
 }
 
 .mode-badge--sheets {
@@ -1005,7 +1117,7 @@ textarea {
 }
 
 /* =============================================
-   Animações
+   Animacoes
    ============================================= */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
@@ -1056,6 +1168,10 @@ textarea {
   .header__nav a { padding: 4px 10px; font-size: 0.8rem; }
   .header__title { font-size: 1rem; }
 
+  .vivo-logo { font-size: 1.5rem; }
+  .vivo-product { font-size: 0.9rem; }
+  .vivo-separator { font-size: 1.2rem; }
+
   .card { padding: 16px; }
 
   h1 { font-size: 1.4rem; }
@@ -1098,7 +1214,7 @@ textarea {
    Acessibilidade
    ============================================= */
 :focus-visible {
-  outline: 2px solid var(--accent-purple);
+  outline: 2px solid var(--accent-purple-light);
   outline-offset: 2px;
 }
 
@@ -1116,7 +1232,7 @@ textarea {
 }
 
 /* =============================================
-   Impressão
+   Impressao
    ============================================= */
 @media print {
   body {
