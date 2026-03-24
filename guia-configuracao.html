@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de Configuração - Avaliação 360 | vivo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f0fa;
+      color: #1a0a2e;
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(123, 45, 142, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a0a2e 0%, #3d1a6e 50%, #7B2D8E 100%);
+      padding: 40px;
+      text-align: center;
+      color: white;
+    }
+
+    .header .vivo-logo {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+
+    .header p {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-top: 8px;
+    }
+
+    .content { padding: 40px; }
+
+    .print-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #7B2D8E;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 32px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .print-btn:hover { background: #660099; }
+
+    .step {
+      margin-bottom: 32px;
+      border-left: 4px solid #7B2D8E;
+      padding-left: 20px;
+    }
+
+    .step-number {
+      display: inline-block;
+      background: #7B2D8E;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-right: 8px;
+    }
+
+    .step h2 {
+      font-size: 1.2rem;
+      color: #1a0a2e;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step p, .step li {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .step ol {
+      padding-left: 20px;
+    }
+
+    .step ol li {
+      margin-bottom: 10px;
+    }
+
+    .code-block {
+      background: #1a0a2e;
+      color: #d4b3e6;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      margin: 16px 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+
+    .highlight-box {
+      background: #f5f0fa;
+      border: 2px solid #7B2D8E;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .highlight-box strong {
+      color: #7B2D8E;
+    }
+
+    .warning-box {
+      background: #fff8e1;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 2px;
+      margin: 16px 0;
+      font-size: 0.7rem;
+    }
+
+    .table-header span {
+      background: #7B2D8E;
+      color: white;
+      padding: 6px 4px;
+      text-align: center;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .links-section {
+      background: linear-gradient(135deg, #1a0a2e, #3d1a6e);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: white;
+    }
+
+    .links-section h3 {
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+
+    .link-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .link-item:last-child { border-bottom: none; }
+
+    .link-item .label {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .link-item .desc {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .link-item .url {
+      font-size: 0.75rem;
+      color: #d4b3e6;
+      word-break: break-all;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px;
+      background: #f5f0fa;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; border-radius: 0; }
+      .print-btn { display: none; }
+      .header { padding: 30px; }
+      .content { padding: 30px; }
+      .step { page-break-inside: avoid; }
+      .code-block { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <span class="vivo-logo">vivo</span>
+      <h1>Avaliacao 360 - Guia de Configuracao</h1>
+      <p>Sistema digital de avaliacao anonima para tecnicos de campo</p>
+    </div>
+
+    <div class="content">
+
+      <button class="print-btn" onclick="window.print()">
+        Salvar como PDF (Ctrl+P)
+      </button>
+
+      <!-- PASSO 1 -->
+      <div class="step">
+        <h2><span class="step-number">1</span> Criar a planilha no Google</h2>
+        <ol>
+          <li>Abra o Google Sheets: <strong>sheets.google.com</strong></li>
+          <li>Clique em <strong>"Em branco"</strong> para criar uma planilha nova</li>
+          <li>Renomeie para <strong>"Avaliacao 360"</strong> (clique no nome "Planilha sem titulo" no canto superior esquerdo)</li>
+          <li>Na primeira linha (linha 1), escreva esses cabecalhos, um em cada coluna:</li>
+        </ol>
+
+        <div class="table-header">
+          <span>Data</span>
+          <span>Equipe</span>
+          <span>Periodo</span>
+          <span>Gestor+</span>
+          <span>Gestor-</span>
+          <span>Empresa</span>
+          <span>NotaEmp</span>
+          <span>Sistema</span>
+          <span>NotaSist</span>
+          <span>Geral</span>
+        </div>
+
+        <div class="warning-box">
+          <strong>Dica:</strong> Os cabecalhos completos sao: Data, Equipe, Periodo, GestorPositivos, GestorNegativos, EmpresaComentario, EmpresaNota, SistemaComentario, SistemaNota, SatisfacaoGeral
+        </div>
+      </div>
+
+      <!-- PASSO 2 -->
+      <div class="step">
+        <h2><span class="step-number">2</span> Criar o script que recebe as respostas</h2>
+        <ol>
+          <li>Na planilha, clique no menu <strong>Extensoes</strong> > <strong>Apps Script</strong></li>
+          <li>Vai abrir uma tela com codigo. <strong>Apague tudo</strong> que tiver la</li>
+          <li>Cole o codigo abaixo:</li>
+        </ol>
+
+        <div class="code-block">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    new Date(),
+    data.equipe,
+    data.periodo,
+    data.gestorPositivos,
+    data.gestorNegativos,
+    data.empresaComentario,
+    data.empresaNota,
+    data.sistemaComentario,
+    data.sistemaNota,
+    data.satisfacaoGeral
+  ]);
+  return ContentService
+    .createTextOutput(JSON.stringify({status: 'success'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var rows = data.slice(1);
+  var result = rows.map(function(row) {
+    var obj = {};
+    headers.forEach(function(header, i) {
+      obj[header] = row[i];
+    });
+    return obj;
+  });
+  return ContentService
+    .createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+
+        <ol start="4">
+          <li>Aperte <strong>Ctrl+S</strong> para salvar</li>
+          <li>Coloque o nome do projeto como <strong>"Avaliacao 360"</strong></li>
+        </ol>
+      </div>
+
+      <!-- PASSO 3 -->
+      <div class="step">
+        <h2><span class="step-number">3</span> Publicar o script</h2>
+        <ol>
+          <li>Clique em <strong>Implantar</strong> > <strong>Nova implantacao</strong> (botao azul no canto superior direito)</li>
+          <li>Clique na engrenagem ao lado de "Selecionar tipo" e escolha <strong>"App da Web"</strong></li>
+          <li>Preencha:
+            <ul style="list-style: none; padding-left: 0; margin-top: 8px;">
+              <li>Descricao: <strong>Avaliacao 360</strong></li>
+              <li>Executar como: <strong>Eu mesmo</strong></li>
+              <li>Quem tem acesso: <strong>Qualquer pessoa</strong></li>
+            </ul>
+          </li>
+          <li>Clique em <strong>Implantar</strong></li>
+          <li>Vai pedir autorizacao. Clique <strong>Autorizar acesso</strong> > escolha sua conta Google</li>
+          <li>Se aparecer "Google nao verificou esse app", clique em <strong>Avancado</strong> > <strong>"Acessar Avaliacao 360 (nao seguro)"</strong> - pode confiar, e seu proprio script</li>
+          <li><strong>COPIE O LINK</strong> que aparece na tela (URL da implantacao)</li>
+        </ol>
+
+        <div class="highlight-box">
+          <strong>O link sera parecido com:</strong><br>
+          https://script.google.com/macros/s/AKfycbx.../exec
+        </div>
+      </div>
+
+      <!-- PASSO 4 -->
+      <div class="step">
+        <h2><span class="step-number">4</span> Conectar no sistema</h2>
+        <ol>
+          <li>Abra: <strong>rodrigolsilvao.github.io/avaliacao-360/setup.html</strong></li>
+          <li>Cole o link copiado no passo 3 no campo <strong>"URL do Google Apps Script"</strong></li>
+          <li>Clique em <strong>"Testar Conexao"</strong></li>
+          <li>Se aparecer verde, clique <strong>"Salvar"</strong></li>
+          <li><strong>Pronto!</strong> O sistema esta conectado</li>
+        </ol>
+      </div>
+
+      <!-- LINKS -->
+      <div class="links-section">
+        <h3>Links do Sistema</h3>
+
+        <div class="link-item">
+          <div>
+            <div class="label">Formulario dos Tecnicos</div>
+            <div class="desc">Manda esse link no grupo - e anonimo</div>
+          </div>
+          <div class="url">rodrigolsilvao.github.io/avaliacao-360/</div>
+        </div>
+
+        <div class="link-item">
+          <div>
+            <div class="label">Painel do Coordenador</div>
+            <div class="desc">Senha: vivo360</div>
+          </div>
+          <div class="url">rodrigolsilvao.github.io/avaliacao-360/dashboard.html</div>
+        </div>
+
+        <div class="link-item">
+          <div>
+            <div class="label">Configuracao</div>
+            <div class="desc">Para conectar o Google Sheets</div>
+          </div>
+          <div class="url">rodrigolsilvao.github.io/avaliacao-360/setup.html</div>
+        </div>
+      </div>
+
+      <!-- IMPORTANTE -->
+      <div class="highlight-box">
+        <strong>Importante:</strong>
+        <ul style="margin-top: 8px; padding-left: 20px;">
+          <li>A avaliacao e 100% anonima - nao aparece nome de ninguem</li>
+          <li>Funciona no celular, e so clicar no link</li>
+          <li>As respostas vao direto pra planilha do Google em tempo real</li>
+          <li>O coordenador pode ver pelo dashboard OU direto na planilha do Google</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <strong>vivo</strong> | Avaliacao 360 - Sistema desenvolvido para uso interno
+    </div>
+
+  </div>
+
+</body>
+</html>
