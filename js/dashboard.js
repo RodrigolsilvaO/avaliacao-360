@@ -180,7 +180,7 @@ function renderBarChart(porEquipe) {
   const equipes = Object.values(porEquipe);
 
   if (equipes.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">\u{1F4CA}</div><div class="empty-state__text">Sem dados para exibir</div></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📊</div><div class="empty-state__text">Sem dados para exibir</div></div>';
     return;
   }
 
@@ -256,7 +256,7 @@ function renderEvaluationList(evaluations) {
   if (!evaluations || evaluations.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state__icon">\u{1F4DD}</div>
+        <div class="empty-state__icon">📝</div>
         <div class="empty-state__text">Nenhuma avaliação encontrada</div>
       </div>
     `;

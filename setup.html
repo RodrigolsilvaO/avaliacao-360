@@ -43,7 +43,7 @@
     <!-- Status atual -->
     <div class="card">
       <div class="card__header">
-        <div class="card__icon">\u2699\uFE0F</div>
+        <div class="card__icon">⚙️</div>
         <div>
           <div class="card__title">Status Atual</div>
           <div class="card__description">Modo de operação do sistema</div>
@@ -57,7 +57,7 @@
     <!-- Modo Demo -->
     <div class="card">
       <div class="card__header">
-        <div class="card__icon">\u{1F4BE}</div>
+        <div class="card__icon">💾</div>
         <div>
           <div class="card__title">Modo Demo (localStorage)</div>
           <div class="card__description">Os dados ficam salvos apenas no navegador</div>
@@ -77,7 +77,7 @@
     <!-- Guia de integração Google Sheets -->
     <div class="card">
       <div class="card__header">
-        <div class="card__icon">\u{1F4D7}</div>
+        <div class="card__icon">📗</div>
         <div>
           <div class="card__title">Integração com Google Sheets</div>
           <div class="card__description">Passo a passo para conectar ao Google Sheets</div>
@@ -215,10 +215,10 @@ function doGet(e) {
 
       <div class="d-flex gap-2 flex-wrap">
         <button onclick="testConnection()" id="testBtn" class="btn btn--secondary btn--small">
-          \u{1F50C} Testar Conexão
+          🔌 Testar Conexão
         </button>
         <button onclick="saveConfig()" id="saveBtn" class="btn btn--primary btn--small">
-          \u{1F4BE} Salvar e Ativar Google Sheets
+          💾 Salvar e Ativar Google Sheets
         </button>
       </div>
 
@@ -229,7 +229,7 @@ function doGet(e) {
     <!-- Observações importantes -->
     <div class="card">
       <div class="card__header">
-        <div class="card__icon">\u26A0\uFE0F</div>
+        <div class="card__icon">⚠️</div>
         <div>
           <div class="card__title">Observações Importantes</div>
         </div>
@@ -275,7 +275,7 @@ function doGet(e) {
         statusEl.innerHTML = '\u2705 Modo Google Sheets ativo. Os dados são enviados para a planilha.';
       } else {
         statusEl.className = 'connection-status connection-status--info';
-        statusEl.innerHTML = '\u{1F4BE} Modo Demo ativo. Os dados são armazenados apenas localmente no navegador.';
+        statusEl.innerHTML = '💾 Modo Demo ativo. Os dados são armazenados apenas localmente no navegador.';
       }
     }
 
@@ -338,7 +338,7 @@ function doGet(e) {
       }
 
       testBtn.disabled = false;
-      testBtn.innerHTML = '\u{1F50C} Testar Conexão';
+      testBtn.innerHTML = '🔌 Testar Conexão';
     }
 
     // Salva configuração e ativa modo Sheets
